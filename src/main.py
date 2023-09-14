@@ -54,7 +54,18 @@ if __name__ == '__main__':
 # %%
 
 url = 'https://easyacademy.unitn.it/AgendaStudentiUnitn/index.php?view=easycourse&include=corso&txtcurr=1+-+Computational+and+theoretical+modelling+of+language+and+cognition&anno=2023&corso=0708H&anno2%5B%5D=P0407%7C1&date=14-09-2023&_lang=en&highlighted_date=0&_lang=en&all_events=1&'
-get_ics_uri(url)
+ics_uri = get_ics_uri(url)
 
 
+# %%
+from ics import Calendar
+import requests
+# Assuming 'ics_uri' is the URI of your iCalendar file
+c = Calendar(requests.get(ics_uri).text)
+
+# Now 'c' is a Calendar object. You can access its events like this:
+for event in c.events:
+    print(event.name)
+    print(event.begin)
+    print(event.end)
 # %%

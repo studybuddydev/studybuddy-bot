@@ -13,15 +13,20 @@ url = 'https://easyacademy.unitn.it/AgendaStudentiUnitn/index.php?view=easycours
 def get_ics_uri(url):
     time.sleep(0.1)  # delay for 100 milliseconds
     uri = urllib.parse.urlparse(url)
+    time.sleep(0.1)
     old_search = urllib.parse.parse_qs(uri.query)
-    new_uri = urllib.parse.ParseResult(scheme="https", netloc="easyacademy.unitn.it", path="/AgendaStudentiUnitn/export/ec_download_ical_list.php", params="", query="", fragment="")
+    new_uri = urllib.parse.ParseResult(
+        scheme="https", 
+        netloc="easyacademy.unitn.it", 
+        path="/AgendaStudentiUnitn/export/ec_download_ical_list.php", 
+        params="", query="", fragment="")
 
     if old_search["include"][0] == "corso":
         new_query = {
             "include": "corso",
-            "anno": old_search["anno"],
-            "corso": old_search["corso"],
-            "anno2[]": old_search["anno2[]"],
+            "anno": old_search["anno"][0],
+            "corso": old_search["corso"][0],
+            "anno2[]": old_search["anno2[]"][0],
         }
 
     else:
@@ -36,3 +41,8 @@ def get_ics_uri(url):
 # %%
 
 # %%
+url = 'https://easyacademy.unitn.it/AgendaStudentiUnitn/index.php?view=easycourse&include=corso&txtcurr=1+-+Computational+and+theoretical+modelling+of+language+and+cognition&anno=2023&corso=0708H&anno2%5B%5D=P0407%7C1&date=14-09-2023&_lang=en&highlighted_date=0&_lang=en&all_events=1&'
+ics_uri = get_ics_uri(url)
+
+
+
