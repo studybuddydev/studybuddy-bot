@@ -11,6 +11,9 @@ pandas = "^2.1.0"
 matplotlib = "^3.7.2"
 python-dotenv = "^1.0.0"
 jupyter = "^1.0.0"
+python-telegram-bot = "^20.5"
+js2py = "^0.74"
+ics = "^0.7.2"
 
 
 
