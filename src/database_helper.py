@@ -40,8 +40,11 @@ class Database:
             self.cursor.execute(query,params or ())
             self.connection.commit()
             print("Query executed successfully")
+            return self.cursor.fetchall()
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
+        
+        
     
     def execute_many(self, sql, params=None):
         self.cursor.executemany(sql, params or ())

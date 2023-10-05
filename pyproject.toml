@@ -11,9 +11,11 @@ pandas = "^2.1.0"
 matplotlib = "^3.7.2"
 python-dotenv = "^1.0.0"
 jupyter = "^1.0.0"
-python-telegram-bot = "^20.5"
+python-telegram-bot = {extras = ["job-queue"], version = "^20.6"}
 js2py = "^0.74"
 ics = "^0.7.2"
+asyncio = "^3.4.3"
+schedule = "^1.2.1"
 
 
 
