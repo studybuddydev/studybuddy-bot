@@ -7,15 +7,14 @@ import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, ConversationHandler, CallbackContext
 from telegram.ext import filters, MessageHandler
-
 from database_helper import Database
-
 from calendario import Calendar
 import schedule
 from datetime import datetime
 import pytz
-import time
+from datetime import time 
 import asyncio
+
 
 
 load_dotenv()
@@ -25,15 +24,10 @@ WAITING_FOR_URL = 1
 
 
 db = Database(os.getenv("DB_PATH"))
-
 db.create_table('users', 'user_id INTEGER, username TEXT, timestamp TEXT')
 db.create_table('events', 'id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, begin DATETIME, end DATETIME')
 
 # loggin things
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
 
 
 async def send_daily_events(context):
@@ -52,7 +46,6 @@ async def send_daily_events(context):
             chat_id=user_id,
             text=msg
         )
-
 
 
  
@@ -138,28 +131,17 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=update.message.tex
     )
 
-def job():
-    # get the current time
-    now = time.localtime()
-    context  = CallbackContext()
-
-    print('job running')
-
-        # run the send_daily_events function
-    asyncio.run(send_daily_events(context))
-
-# schedule the job to run every minute
-schedule.every().minute.do(job)
-
-
-async def callback_minute(context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id='529895213', text='One message every minute')
-
-
 
 
 
 if __name__ == '__main__':
+
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
+
+
     application = ApplicationBuilder().token(TOKEN).build()
 
 
@@ -175,6 +157,10 @@ if __name__ == '__main__':
 
    
     job_minute = job_queue.run_repeating(send_daily_events, interval=60, first=10)
+
+    job_queue.run_daily(send_daily_events, 
+                        time= time(hour=8, minute=0, tzinfo=pytz.timezone('Europe/Rome')),
+                        days=(0, 1, 2, 3, 4))
 
     
     echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo) # repeat everything
